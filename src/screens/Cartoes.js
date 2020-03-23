@@ -7,30 +7,55 @@ import {
   TouchableOpacity
 } from "react-native";
 
-function Cartoes(props) {
-  return (
-    <View style={styles.container}>
-      <View style={styles.rect}>
-        <Text style={styles.nomeDoBanco}>Nome do Banco</Text>
-        <Text style={styles.loremIpsum}>2379 2323 5472 2211</Text>
-        <View style={styles.validoAteStack}>
-          <Text style={styles.validoAte}>Válido até</Text>
-          <Text style={styles.loremIpsum2}>02/10</Text>
+import api from '../services/api'
+
+class Cartoes extends Component {
+  state = {
+    user: '5e76d7a8792009200e911ad5', //deverá trocar para email
+    cards: {}
+  }
+  componentDidMount(){
+    this.loadCard();
+  
+  }
+  loadCard = async() => {
+    const response = await api.get('/user/'.concat(this.state.user)); //pega o dado do usuario da api
+    console.log(response.data.card)
+    const cards = {
+      name: response.data.card[0].name,
+      number: response.data.card[0].number,
+      valid_until: response.data.card[0].valid_until
+    }
+    console.log(cards)
+    this.setState({cards}) //armazena o dados do usuario
+  };
+
+  render(){
+    return (
+      <View style={styles.container}>
+        <View style={styles.rect}>
+          <Text style={styles.nomeDoBanco}>{this.state.cards.name}</Text>
+          <Text style={styles.loremIpsum}>{this.state.cards.number}</Text>
+          <View style={styles.validoAteStack}>
+            <Text style={styles.validoAte}>Válido até</Text>
+            <Text style={styles.loremIpsum2}>{this.state.cards.valid_until}</Text>
+          </View>
         </View>
+        <Text style={styles.addSeuCartao}>Add seu cartão</Text>
+        <StatusBar animated={false} barStyle="light-content"></StatusBar>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.goBack()}
+          style={styles.button}
+        >
+          <View style={styles.rect22Stack}>
+            <View style={styles.rect22}></View>
+            <View style={styles.rect3}></View>
+          </View>
+        </TouchableOpacity>
       </View>
-      <Text style={styles.addSeuCartao}>Add seu cartão</Text>
-      <StatusBar animated={false} barStyle="light-content"></StatusBar>
-      <TouchableOpacity
-        onPress={() => props.navigation.goBack()}
-        style={styles.button}
-      >
-        <View style={styles.rect22Stack}>
-          <View style={styles.rect22}></View>
-          <View style={styles.rect3}></View>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({

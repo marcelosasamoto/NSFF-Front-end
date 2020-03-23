@@ -11,105 +11,132 @@ import MaterialButtonTransparentHamburger from "../components/MaterialButtonTran
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 
-function Home(props) {
-  return (
-    <View style={styles.container}>
-      <View style={styles.materialButtonTransparentHamburgerRow}>
-        <MaterialButtonTransparentHamburger
-          style={styles.materialButtonTransparentHamburger}
-        ></MaterialButtonTransparentHamburger>
-        <Text style={styles.nsff}>NSFF</Text>
-      </View>
-      <TouchableOpacity
-        onPress={() => props.navigation.navigate("InfoCont")}
-        style={styles.button7}
-      >
-        <View style={styles.rect2333}>
-          <Text style={styles.saldoDisponivel}>Saldo disponivel</Text>
-          <Text style={styles.loremIpsum}>2000.00</Text>
-          <Text style={styles.verGastos}>Ver gastos</Text>
+import api from '../services/api'
+
+
+class Home extends Component {
+  state = {
+    user: '5e76d7a8792009200e911ad5', //deverá trocar para email
+    docs: {}
+  }
+  componentDidMount(){
+    this.loadUser();
+  
+  }
+  loadUser = async() => {
+    const response = await api.get('/user/'.concat(this.state.user)); //pega o dado do usuario da api
+    const docs = {
+      name: response.data.name,
+      email: response.data.email,
+      balance: response.data.profile[0].balance,
+      expense: response.data.profile[0].expense
+    }
+    this.setState({docs}) //armazena o dados do usuario
+  };
+
+  render (){
+    return (
+      <View style={styles.container}>
+        <View style={styles.materialButtonTransparentHamburgerRow}>
+          <MaterialButtonTransparentHamburger
+            style={styles.materialButtonTransparentHamburger}
+          ></MaterialButtonTransparentHamburger>
+          <Text style={styles.nsff}>NSFF</Text>
         </View>
-      </TouchableOpacity>
-      <View style={styles.button6Row}>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("InfoCont")}
-          style={styles.button6}
+          onPress={() => this.props.navigation.navigate("InfoCont")}
+          style={styles.button7}
         >
-          <View style={styles.group41}>
-            <View style={styles.group35}>
-              <View style={styles.rect222}>
-                <Text style={styles.gastos4}>Gastos</Text>
-                <Text style={styles.gastos3}>- 600.00</Text>
-              </View>
-            </View>
+          <View style={styles.card1}>
+            <Text style={styles.saldoDisponivel}>Saldo disponivel</Text>
+            <Text style={styles.saldoDisponivelValor}>{this.state.docs.balance}</Text>
+            <Text style={styles.verGastos}>Ver gastos</Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.group43}>
-          <View style={styles.group5}>
-            <View style={styles.rect22}>
-              <Text style={styles.saldo2}>Saldo</Text>
-              <Text style={styles.gastos2}>100.00</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-      <StatusBar
-        animated={false}
-        barStyle="light-content"
-        hidden={false}
-      ></StatusBar>
-      <View style={styles.button8Row}>
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate("Untitled")}
-          style={styles.button8}
-        >
-          <View style={styles.group6Stack}>
-            <View style={styles.group6}>
-              <View style={styles.rect2334}></View>
-            </View>
-            <FontAwesomeIcon
-              name="question"
-              style={styles.icon3}
-            ></FontAwesomeIcon>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.group47}>
-          <View style={styles.group46}>
-            <View style={styles.group45}>
-              <View style={styles.group33Stack}>
-                <View style={styles.group33}>
-                  <View style={styles.rect232}></View>
+        <View style={styles.button6Row}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("InfoCont")}
+            style={styles.button6}
+          >
+            <View style={styles.group41}>
+              <View style={styles.group35}>
+                <View style={styles.rect222}>
+                  <Text style={styles.gastos4}>Gastos</Text>
+                  <Text style={styles.gastos3}>- {this.state.docs.expense}</Text>
                 </View>
-                <FontAwesomeIcon
-                  name="money"
-                  style={styles.icon2}
-                ></FontAwesomeIcon>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.group43}>
+            <View style={styles.group5}>
+              <View style={styles.rect22}>
+                <Text style={styles.saldo2}>Saldo</Text>
+                <Text style={styles.gastos2}>{this.state.docs.balance}</Text>
               </View>
             </View>
           </View>
         </View>
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate("Cartoes")}
-          style={styles.button5}
-        >
-          <View style={styles.button3Stack}>
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate("Untitled")}
-              style={styles.button3}
-            >
-              <View style={styles.rect2332}></View>
-            </TouchableOpacity>
-            <EntypoIcon name="credit-card" style={styles.icon4}></EntypoIcon>
+        <StatusBar
+          animated={false}
+          barStyle="light-content"
+          hidden={false}
+        ></StatusBar>
+        <View style={styles.button8Row}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Untitled")}
+            style={styles.button8}
+          >
+            <View style={styles.group6Stack}>
+              <View style={styles.group6}>
+                <View style={styles.rect2334}></View>
+              </View>
+              <FontAwesomeIcon
+                name="question"
+                style={styles.icon3}
+              ></FontAwesomeIcon>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.group47}>
+            <View style={styles.group46}>
+              <View style={styles.group45}>
+                <View style={styles.group33Stack}>
+                  <View style={styles.group33}>
+                    <View style={styles.rect232}></View>
+                  </View>
+                  <FontAwesomeIcon
+                    name="money"
+                    style={styles.icon2}
+                  ></FontAwesomeIcon>
+                </View>
+              </View>
+            </View>
           </View>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Cartoes")}
+            style={styles.button5}
+          >
+            <View style={styles.button3Stack}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("Untitled")}
+                style={styles.button3}
+              >
+                <View style={styles.rect2332}></View>
+              </TouchableOpacity>
+              <EntypoIcon name="credit-card" style={styles.icon4}></EntypoIcon>
+            </View>
+          </TouchableOpacity>
+        </View>
+        
+        <Image
+        
+          source={require("../assets/images/javascript-live-dynamic-charts-graphs.png")}
+          resizeMode="stretch"
+          style={styles.image}
+        ></Image>
       </View>
-      <Image
-        source={require("../assets/images/javascript-live-dynamic-charts-graphs.png")}
-        resizeMode="stretch"
-        style={styles.image}
-      ></Image>
-    </View>
-  );
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({
@@ -143,7 +170,7 @@ const styles = StyleSheet.create({
     marginTop: 1,
     alignSelf: "center"
   },
-  rect2333: {
+  card1: {
     backgroundColor: "rgba(12,13,66,1)",
     borderRadius: 9,
     flex: 1
@@ -157,7 +184,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginLeft: 38
   },
-  loremIpsum: {
+  saldoDisponivelValor: {
     width: 146,
     height: 25,
     color: "rgba(255,255,255,1)",

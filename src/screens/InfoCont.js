@@ -1,64 +1,68 @@
 import React, { Component } from "react";
 import { StyleSheet, View, StatusBar, Text, ScrollView } from "react-native";
 
-function InfoCont(props) {
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content"></StatusBar>
-      <Text style={styles.extrato}>Extrato</Text>
-      <View style={styles.scrollArea}>
-        <ScrollView
-          horizontal={false}
-          contentContainerStyle={styles.scrollArea_contentContainerStyle}
-        >
-          <View style={styles.group6}>
-            <View style={styles.group2}>
-              <View style={styles.group7}>
-                <View style={styles.rect}>
-                  <View style={styles.loremIpsum6Row}>
-                    <Text style={styles.loremIpsum6}>-350 Americanas</Text>
-                    <View style={styles.cartaoBbColumn}>
-                      <Text style={styles.cartaoBb}>Cartão BB</Text>
-                      <Text style={styles.loremIpsum5}>13-03-2020</Text>
+class InfoCont extends Component {
+
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content"></StatusBar>
+        <Text style={styles.extrato}>Extrato</Text>
+        <View style={styles.scrollArea}>
+          <ScrollView
+            horizontal={false}
+            contentContainerStyle={styles.scrollArea_contentContainerStyle}
+          >
+            <View style={styles.group6}>
+              <View style={styles.group2}>
+                <View style={styles.group7}>
+                  <View style={styles.rect}>
+                    <View style={styles.loremIpsum6Row}>
+                      <Text style={styles.loremIpsum6}>-350 Americanas</Text>
+                      <View style={styles.cartaoBbColumn}>
+                        <Text style={styles.cartaoBb}>Cartão BB</Text>
+                        <Text style={styles.loremIpsum5}>13-03-2020</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
               </View>
             </View>
-          </View>
-          <View style={styles.group3}>
-            <View style={styles.rect2}>
-              <Text style={styles.loremIpsum2}>- 760 KaBuM</Text>
-            </View>
-          </View>
-          <View style={styles.group4}>
-            <View style={styles.rect3}>
-              <Text style={styles.loremIpsum3}>+ 356 João</Text>
-            </View>
-          </View>
-          <View style={styles.group5Stack}>
-            <View style={styles.group5}>
-              <View style={styles.rect4}>
-                <Text style={styles.loremIpsum4}>+ 879 Maria</Text>
+            <View style={styles.group3}>
+              <View style={styles.rect2}>
+                <Text style={styles.loremIpsum2}>- 760 KaBuM</Text>
               </View>
             </View>
-            <Text style={styles.transferencia}>Transferência</Text>
-          </View>
-          <Text style={styles.loremIpsum62}>29-02-2020</Text>
-          <View style={styles.rect5}>
-            <Text style={styles.testeScrollview}>Teste scrollview</Text>
-          </View>
-          <View style={styles.rect6}>
-            <Text style={styles.testeScroolview}>Teste scroolview</Text>
-          </View>
-          <View style={styles.rect7Stack}>
-            <View style={styles.rect7}></View>
-            <Text style={styles.fimDoScroolview}>Fim do scroolview</Text>
-          </View>
-        </ScrollView>
+            <View style={styles.group4}>
+              <View style={styles.rect3}>
+                <Text style={styles.loremIpsum3}>+ 356 João</Text>
+              </View>
+            </View>
+            <View style={styles.group5Stack}>
+              <View style={styles.group5}>
+                <View style={styles.rect4}>
+                  <Text style={styles.loremIpsum4}>+ 879 Maria</Text>
+                </View>
+              </View>
+              <Text style={styles.transferencia}>Transferência</Text>
+            </View>
+            <Text style={styles.loremIpsum62}>29-02-2020</Text>
+            <View style={styles.rect5}>
+              <Text style={styles.testeScrollview}>Teste scrollview</Text>
+            </View>
+            <View style={styles.rect6}>
+              <Text style={styles.testeScroolview}>Teste scroolview</Text>
+            </View>
+            <View style={styles.rect7Stack}>
+              <View style={styles.rect7}></View>
+              <Text style={styles.fimDoScroolview}>Fim do scroolview</Text>
+            </View>
+          </ScrollView>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({

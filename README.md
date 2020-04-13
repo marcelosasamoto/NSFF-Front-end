@@ -12,7 +12,8 @@ Desenvolvido em [React Native](https://reactnative.dev/), utilizando o expo.
 
 Prototipado com [BuilderX](https://builderx.io/)
 
-
+## Prototipação de Telas:
+<img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/criar-conta.png" width="200">. <img src="https://raw.githubusercontent.com/marcelosasamoto/NSFF-Front-end/master/Protipacao-de-tela/login.png" width="200">  <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/inicial.png" width="200">. <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/cartoes.png?raw=true" width="200">. <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/extrato.png" width="200">. <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/dica.png" width="200">. <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/selecao.png" width="200">
 
 ## Rodando o App
 ```sh

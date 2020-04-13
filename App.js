@@ -8,9 +8,12 @@ import Cartoes from "./src/screens/Cartoes";
 import Home from "./src/screens/Home";
 import InfoCont from "./src/screens/InfoCont";
 import Untitled from "./src/screens/Untitled";
+import CriarConta from "./src/screens/CriarConta";
+import Login from "./src/screens/Login";
 
 const DrawerNavigation = createDrawerNavigator({
-  
+  Login:Login,
+  CriarConta:CriarConta,
   Home: Home,
   Cartoes: Cartoes,
   InfoCont: InfoCont,
@@ -22,7 +25,8 @@ const StackNavigation = createStackNavigator(
     DrawerNavigation: {
       screen: DrawerNavigation
     },
-
+    Login:Login,
+    CriarConta:CriarConta,
     Home: Home,
     Cartoes: Cartoes,
     InfoCont: InfoCont,

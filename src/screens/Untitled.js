@@ -14,20 +14,7 @@ function Untitled(props) {
           </View>
         </View>
       </View>
-      <View style={styles.rect3}>
-        <View style={styles.loremIpsum6Row}>
-          <Text style={styles.loremIpsum6}>- 338 KaBuM</Text>
-          <View style={styles.cartaoOriginal3Column}>
-            <Text style={styles.cartaoOriginal3}>Cartão Original</Text>
-            <Text style={styles.loremIpsum5}>10-03-2020</Text>
-          </View>
-        </View>
-      </View>
-      <View style={styles.rect4}>
-        <Text style={styles.loremIpsum7}>
-          Sua despesa com a Kabum nesse mês foi 1098 reais.{"\n"} Not Stonks!
-        </Text>
-      </View>
+      
       <StatusBar barStyle="light-content"></StatusBar>
     </View>
   );

@@ -1,37 +1,86 @@
 import React, { Component } from "react";
+
+import { StackActions, NavigationActions } from "react-navigation";
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   StatusBar,
-  Image
+  Image,
+  AsyncStorage,
+  TouchableHighlightBase
+  
 } from "react-native";
 import MaterialButtonTransparentHamburger from "../components/MaterialButtonTransparentHamburger";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 
 import api from '../services/api'
+import { TOKEN_KEY, setToken, getUser } from "../services/auth";
 
 
 class Home extends Component {
   state = {
-    user: '5e76d7a8792009200e911ad5', //deverá trocar para email
-    docs: {}
+    user: '', 
+    docs: {
+      name: '',
+      email: '',
+      balance: 0,
+      expense: 0
+    },
+    refreshing:false
   }
-  componentDidMount(){
-    this.loadUser();
+  
+  async componentDidMount(){
+    let a;
+    await getUser()
+      .then(function(usr){
+        if (usr !== null){
+          a = usr
+        }else{
+          console.log(131928467)
+        }
+      })
+    this.setState({user:a, docs:{}})
+    const Token = AsyncStorage.getItem("@NSFF-APP:token")
+    //console.log('token:',Token)
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Home' }),
+      ],
+    });
+    if (this.state.user !== ''){
+      this.loadUser();
+    }else{
+      this.props.navigation.navigate("Login")
+    }
   
   }
   loadUser = async() => {
-    const response = await api.get('/user/'.concat(this.state.user)); //pega o dado do usuario da api
-    const docs = {
-      name: response.data.name,
-      email: response.data.email,
-      balance: response.data.profile[0].balance,
-      expense: response.data.profile[0].expense
-    }
+    let docs = {}
+    await api.get('/user/'.concat(this.state.user)) //pega o dado do usuario da api
+    .then( function(response){
+      if (response.data.profile[0] !== undefined ){
+        docs = {
+          name: response.data.name,
+          email: response.data.email,
+          balance: response.data.profile[0].balance,
+          expense: response.data.profile[0].expense
+        }
+      }else {
+        docs = {
+          balance: 0,
+          expense: 0,
+        }
+      }
+    })
+    .catch( function (err){
+      console.log('erro',err)
+    })
     this.setState({docs}) //armazena o dados do usuario
+    
   };
 
   render (){
@@ -41,7 +90,7 @@ class Home extends Component {
           <MaterialButtonTransparentHamburger
             style={styles.materialButtonTransparentHamburger}
           ></MaterialButtonTransparentHamburger>
-          <Text style={styles.nsff}>NSFF</Text>
+          <Text style={styles.nsff}>NSFF{this.state.refreshing}</Text>
         </View>
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("InfoCont")}
@@ -83,7 +132,7 @@ class Home extends Component {
         ></StatusBar>
         <View style={styles.button8Row}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("Untitled")}
+            onPress={() => this.props.navigation.navigate("Untitled") }
             style={styles.button8}
           >
             <View style={styles.group6Stack}>
@@ -162,7 +211,8 @@ const styles = StyleSheet.create({
     height: 81,
     flexDirection: "row",
     marginTop: 22,
-    marginRight: 131
+    marginRight: 131,
+    
   },
   button7: {
     width: 365,

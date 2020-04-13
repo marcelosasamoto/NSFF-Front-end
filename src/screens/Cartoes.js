@@ -1,20 +1,34 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
   StyleSheet,
   View,
   Text,
   StatusBar,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert,
+  TouchableHighlight,
 } from "react-native";
 
-import api from '../services/api'
+import api from '../services/api';
+import {getUser} from '../services/auth';
 
 class Cartoes extends Component {
   state = {
-    user: '5e76d7a8792009200e911ad5', //deverá trocar para email
-    cards: {}
+    user: '', //deverá trocar para email
+    cards: {},
+    arr:[1,2,3,4]
   }
-  componentDidMount(){
+  async componentDidMount(){
+    let a;
+    await getUser()
+      .then(function(usr){
+        if (usr !== null){
+          a = usr
+        }else{
+          console.log(123123)
+        }
+      })
+    this.setState({user:a})
     this.loadCard();
   
   }
@@ -33,6 +47,7 @@ class Cartoes extends Component {
   render(){
     return (
       <View style={styles.container}>
+        
         <View style={styles.rect}>
           <Text style={styles.nomeDoBanco}>{this.state.cards.name}</Text>
           <Text style={styles.loremIpsum}>{this.state.cards.number}</Text>
@@ -41,6 +56,7 @@ class Cartoes extends Component {
             <Text style={styles.loremIpsum2}>{this.state.cards.valid_until}</Text>
           </View>
         </View>
+        
         <Text style={styles.addSeuCartao}>Add seu cartão</Text>
         <StatusBar animated={false} barStyle="light-content"></StatusBar>
         <TouchableOpacity

@@ -19,6 +19,12 @@ Prototipado com [BuilderX](https://builderx.io/)
 <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/criar-conta.png" width="200">. <img src="https://raw.githubusercontent.com/marcelosasamoto/NSFF-Front-end/master/Protipacao-de-tela/login.png" width="200">  <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/inicial.png" width="200">. <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/cartoes.png?raw=true" width="200">. <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/extrato.png" width="200">. <img src="https://github.com/marcelosasamoto/NSFF-Front-end/blob/master/Protipacao-de-tela/dica.png" width="200">
 
 ## Rodando o App
+***- É necessario instalar o aplicativo do Expo, diponível em*** 
+[Android]( https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en) ou 
+[IOS](https://apps.apple.com/us/app/expo-client/id982107779)  
+
+***Também é necessário rodar servidor do NSFF-Backend para poder criar conta e logar***  
+***- Disponivel em*** [NSFF-Backend](https://github.com/marcelosasamoto/NSFF-Back-end)
 ```sh
 git clone https://github.com/marcelosasamoto/NSFF-Front-end.git
 cd NSFF-Front-end

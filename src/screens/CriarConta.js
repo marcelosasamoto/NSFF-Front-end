@@ -1,17 +1,28 @@
 import React, { Component } from "react";
 import { StyleSheet, ErrorMessage, TextInput, View, Text, TouchableOpacity } from "react-native";
 import api from '../services/api'
-
+const inicialstate ={
+  name: '',
+  email: '', 
+  password: '',
+  error: '',
+  send: false
+}
 class CriarConta extends Component {
-  state = {
-    name: '',
-    email: '', 
-    password: '',
-    error: ''
+  constructor(props){
+    super(props);
+    this.state = inicialstate
   }
   
+  
   componentDidMount(){
-    this.createUser();
+    this.subs = this.props.navigation.addListener("didFocus",async () =>{
+    this.setState(inicialstate)
+      this.createUser();
+    })
+  }
+  componentWillUnmount(){
+    this.subs.remove();
   }
   handleEmailChange = (email) => {
     this.setState({ email });
@@ -22,13 +33,17 @@ class CriarConta extends Component {
   handlePasswordChange = (password) => {
     this.setState({ password });
   };
+  confirm = (send) => {
+    this.setState({ send: true });
+    this.createUser()
+  };
   
   createUser = async() => {
-    if (this.state.email.length === 0 || this.state.password.length === 0) {
+    if (this.state.email.length === 0 || this.state.password.length === 0 || this.state.send === false) {
       this.setState({ error: 'Preencha Nome, Email e senha para criar a conta!' }, () => false);
     } else {
       try {
-        const response = await api.post('/create', {
+        await api.post('/create', {
           name: this.state.name,
           email: this.state.email,
           password: this.state.password,
@@ -36,6 +51,7 @@ class CriarConta extends Component {
         this.props.navigation.navigate("Login")
       }
       catch (_err) {
+        console.log(2121,_err)
         this.setState({ error: 'Email já utilizado' });
       }
     }
@@ -61,7 +77,7 @@ class CriarConta extends Component {
     {this.state.error.length!== 0 && <Text style={styles.tip}>{this.state.error}</Text> }
         <Text style={styles.criarContaNoNsff}>Criar conta no NSFF</Text>
         <TouchableOpacity
-          onPress={this.createUser}
+          onPress={this.confirm}
           style={styles.button}
         >
           <Text style={styles.criarMinhaConta}>Criar minha conta</Text>

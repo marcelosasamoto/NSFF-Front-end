@@ -21,42 +21,50 @@ import { TOKEN_KEY, setToken, getUser } from "../services/auth";
 
 
 class Home extends Component {
-  state = {
-    user: '', 
-    docs: {
-      name: '',
-      email: '',
-      balance: 0,
-      expense: 0
-    },
-    refreshing:false
+  constructor(props){
+    super(props);
+    this.state = {
+      user: '', 
+      docs: {
+        name: '',
+        email: '',
+        balance: 0,
+        expense: 0
+      },
+      refreshing:false
+    }
   }
   
-  async componentDidMount(){
-    let a;
-    await getUser()
-      .then(function(usr){
-        if (usr !== null){
-          a = usr
-        }else{
-          console.log(131928467)
-        }
-      })
-    this.setState({user:a, docs:{}})
-    const Token = AsyncStorage.getItem("@NSFF-APP:token")
-    //console.log('token:',Token)
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Home' }),
-      ],
-    });
-    if (this.state.user !== ''){
-      this.loadUser();
-    }else{
-      this.props.navigation.navigate("Login")
-    }
   
+  async componentDidMount(){
+    this.subs = this.props.navigation.addListener("didFocus",async () =>{
+      let a;
+      await getUser()
+        .then(function(usr){
+          if (usr !== null){
+            a = usr
+          }else{
+            console.log(131928467)
+          }
+        })
+      this.setState({user:a, docs:{}})
+      const Token = AsyncStorage.getItem("@NSFF-APP:token")
+      //console.log('token:',Token)
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Home' }),
+        ],
+      });
+      if (this.state.user !== ''){
+        this.loadUser();
+      }else{
+        this.props.navigation.navigate("Login")
+      }
+    })
+  }
+  componentWillUnmount(){
+    this.subs.remove();
   }
   loadUser = async() => {
     let docs = {}
@@ -111,7 +119,7 @@ class Home extends Component {
               <View style={styles.group35}>
                 <View style={styles.rect222}>
                   <Text style={styles.gastos4}>Gastos</Text>
-                  <Text style={styles.gastos3}>- {this.state.docs.expense}</Text>
+                  <Text style={styles.gastos3}>{this.state.docs.expense}</Text>
                 </View>
               </View>
             </View>

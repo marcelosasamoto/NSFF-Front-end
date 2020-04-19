@@ -1,24 +1,33 @@
 import React, { Component, useState } from "react";
 import {
   StyleSheet,
+  Modal,
   View,
   Text,
   StatusBar,
   TouchableOpacity,
-  Alert,
+  ScrollView,
   TouchableHighlight,
+  TouchableHighlightBase,
 } from "react-native";
-
 import api from '../services/api';
 import {getUser} from '../services/auth';
+import { TextInput, FlatList } from "react-native-gesture-handler";
+
 
 class Cartoes extends Component {
   state = {
     user: '', //deverá trocar para email
-    cards: {},
-    arr:[1,2,3,4]
+    cards: [],
+    modalVisible: false,
+    name: '',
+    number: '',
+    valid_until: '',
+    error: '',
+    send: false
   }
   async componentDidMount(){
+    this.subs = this.props.navigation.addListener("didFocus",async () =>{
     let a;
     await getUser()
       .then(function(usr){
@@ -30,44 +39,144 @@ class Cartoes extends Component {
       })
     this.setState({user:a})
     this.loadCard();
-  
+    });
   }
+
+  componentWillUnmount(){
+    this.subs.remove();
+  }
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  }
+
   loadCard = async() => {
     const response = await api.get('/user/'.concat(this.state.user)); //pega o dado do usuario da api
-    console.log(response.data.card)
-    const cards = {
-      name: response.data.card[0].name,
-      number: response.data.card[0].number,
-      valid_until: response.data.card[0].valid_until
+    const cards = response.data.card
+    console.log(1212,cards)
+    this.setState({ cards }) //armazena o dados do usuario
+    console.log(this.state.name,this.state.number,this.state.valid_until)
+  };
+ 
+
+  handleNameBank = (name) => {
+    this.setState({ name });
+  };
+  handleNumberCard = (number) => {
+    this.setState({ number });
+  };
+  handleValidUntil = (valid_until) => {
+    this.setState({ valid_until });
+  };
+  confirm = (send) => {
+    this.setState({ send: true });
+    this.createCard()
+    this.setModalVisible(!this.state.modalVisible);
+  };
+  createCard = async() => {
+    
+    console.log(111111,this.state.name,this.state.number,this.state.valid_until)
+    if (this.state.name.length === 0 || this.state.number.length === 0 || this.state.valid_until.length === 0 ) {
+      this.setState({ error: 'Preencha todos os dados!' }, () => false);
+      console.log(10000,this.state.name.length ,this.state.number.length,this.state.valid_until.length);
+    } else {
+      try {
+        console.log(22222,this.state.name, this.state.number, this.state.valid_until)
+        const response = await api.post('/user/'.concat(this.state.user,'/addcard'), {
+          card: {
+            name: this.state.name,
+            number: this.state.number,
+            valid_until: this.state.valid_until,
+          }
+        })
+        console.log(2,response.data)
+        const cards = response.data
+        this.setState({cards})
+      }
+      catch (_err) {
+        console.log('err',_err)
+        
+        this.setState({ error: 'cartao ja utilizado' });
+      }
     }
-    console.log(cards)
-    this.setState({cards}) //armazena o dados do usuario
   };
 
+  renderItem = ({item}) =>(
+    <View style={styles.rect}>
+      <Text style={styles.nomeDoBanco}>{item.name}</Text>
+      <Text style={styles.loremIpsum}>{item.number}</Text>
+      <View style={styles.validoAteStack}>
+        <Text style={styles.validoAte}>Válido até</Text>
+        <Text style={styles.loremIpsum2}>{item.valid_until}</Text>
+      </View>
+    </View>
+  )
   render(){
+
+   const { modalVisible } = this.state;
     return (
       <View style={styles.container}>
-        
-        <View style={styles.rect}>
-          <Text style={styles.nomeDoBanco}>{this.state.cards.name}</Text>
-          <Text style={styles.loremIpsum}>{this.state.cards.number}</Text>
-          <View style={styles.validoAteStack}>
-            <Text style={styles.validoAte}>Válido até</Text>
-            <Text style={styles.loremIpsum2}>{this.state.cards.valid_until}</Text>
-          </View>
-        </View>
-        
-        <Text style={styles.addSeuCartao}>Add seu cartão</Text>
-        <StatusBar animated={false} barStyle="light-content"></StatusBar>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.goBack()}
-          style={styles.button}
+        <FlatList 
+          data = {this.state.cards}
+          keyExtractor={item =>item._id}
+          renderItem={this.renderItem}        
         >
-          <View style={styles.rect22Stack}>
-            <View style={styles.rect22}></View>
-            <View style={styles.rect3}></View>
+
+        </FlatList>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Preencha as informações bancários abaixo</Text>
+              
+                <TextInput style={styles.newbank} 
+                  placeholder='Nome do banco' 
+                  value={this.state.name}
+                  onChangeText={this.handleNameBank} />
+                <TextInput style={styles.newbank} 
+                  placeholder='Numero do cartão' 
+                  value={this.state.number}
+                  onChangeText={this.handleNumberCard}
+                  keyboardType = 'numeric' />
+                <TextInput style={styles.newbank} 
+                  placeholder='Valido até'
+                  value={ this.state.valid_until}
+                  onChangeText={this.handleValidUntil} 
+                  keyboardType = 'numeric' />
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  onPress={this.confirm}>
+                  <Text style={styles.textStyle} >Adicionar</Text>
+                </TouchableHighlight>
+              
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "red" }}
+                  onPress={() => {this.setModalVisible(!modalVisible);}}>
+                  <Text style={styles.textStyle} >Cancelar</Text>
+                </TouchableHighlight>
+            </View>
           </View>
-        </TouchableOpacity>
+        </Modal>
+
+        <TouchableHighlight
+          style={styles.openButton}
+          onPress={() => {
+            this.setModalVisible(true);
+          }}
+        >
+          <Text style={styles.textStyle}>Adicionar cartão</Text>
+        </TouchableHighlight>
+
+
+
+        <StatusBar animated={false} barStyle="light-content"></StatusBar>
+        
       </View>
     );
   }
@@ -144,8 +253,8 @@ const styles = StyleSheet.create({
   button: {
     width: 25,
     height: 25,
-    marginTop: 351,
-    marginLeft: 191
+    marginTop: 25,
+    alignSelf: 'center'
   },
   rect22: {
     top: 0,
@@ -166,7 +275,63 @@ const styles = StyleSheet.create({
   rect22Stack: {
     width: 25,
     height: 25
-  }
+  },
+  
+  
+  modalView: {
+    margin: 20,
+    marginTop: 40,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    width:200,
+    backgroundColor: "#2196F3",
+    borderRadius: 20,
+    marginTop:20,
+    alignSelf:'center',
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  newbank:{    
+    height: 40,
+    width:300,
+    color: "black",
+    fontSize: 22,
+    fontFamily: "roboto-regular",
+    marginTop: 34,
+    alignSelf: 'center'
+  },
+  button: {
+    width: 195,
+    height: 45,
+    backgroundColor: "rgba(12,13,66,1)",
+    borderRadius: 10,
+    borderColor: "#000000",
+    borderWidth: 0,
+    borderStyle: "dashed",
+    marginTop: 20,
+    alignSelf: 'center'
+  },
 });
 
 export default Cartoes;

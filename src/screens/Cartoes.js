@@ -5,10 +5,7 @@ import {
   View,
   Text,
   StatusBar,
-  TouchableOpacity,
-  ScrollView,
   TouchableHighlight,
-  TouchableHighlightBase,
 } from "react-native";
 import api from '../services/api';
 import {getUser} from '../services/auth';
@@ -103,11 +100,7 @@ class Cartoes extends Component {
   renderItem = ({item}) =>(
     <View style={styles.rect}>
       <Text style={styles.nomeDoBanco}>{item.name}</Text>
-      <Text style={styles.loremIpsum}>{item.number}</Text>
-      <View style={styles.validoAteStack}>
-        <Text style={styles.validoAte}>Válido até</Text>
-        <Text style={styles.loremIpsum2}>{item.valid_until}</Text>
-      </View>
+     
     </View>
   )
   render(){

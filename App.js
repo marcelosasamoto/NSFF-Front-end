@@ -6,18 +6,20 @@ import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import Cartoes from "./src/screens/Cartoes";
 import Home from "./src/screens/Home";
-import InfoCont from "./src/screens/InfoCont";
+import Extrato from "./src/screens/Extrato";
 import Untitled from "./src/screens/Untitled";
 import CriarConta from "./src/screens/CriarConta";
 import Login from "./src/screens/Login";
+import Categoriza from "./src/screens/Categoriza";
 
 const DrawerNavigation = createDrawerNavigator({
   Login:Login,
   CriarConta:CriarConta,
   Home: Home,
   Cartoes: Cartoes,
-  InfoCont: InfoCont,
-  Untitled: Untitled
+  Extrato: Extrato,
+  Untitled: Untitled,
+  Categoriza: Categoriza
 });
 
 const StackNavigation = createStackNavigator(
@@ -29,8 +31,9 @@ const StackNavigation = createStackNavigator(
     CriarConta:CriarConta,
     Home: Home,
     Cartoes: Cartoes,
-    InfoCont: InfoCont,
-    Untitled: Untitled
+    Extrato: Extrato,
+    Untitled: Untitled,
+    Categoriza: Categoriza
   },
   {
     headerMode: "none"

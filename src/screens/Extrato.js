@@ -13,6 +13,7 @@ class InfoCont extends Component {
             horizontal={false}
             contentContainerStyle={styles.scrollArea_contentContainerStyle}
           >
+            
             <View style={styles.group6}>
               <View style={styles.group2}>
                 <View style={styles.group7}>

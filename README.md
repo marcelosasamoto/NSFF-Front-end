@@ -1,15 +1,17 @@
 # NSFF-Front-end
 ## Sobre
 
-Este projeto vem com a proposta de dar dicas financeiras, sendo um conselheiro financeiro. 
+Este projeto vem com a proposta de dar dicas financeiras para leigos no assunto. Dando meios acessíveis para ensinar o usuário a controlar seus gastos.
 Utilizando inteligência artificial para analisar seus gastos e ganhos, o aplicativo dá dicas em relação ao desempenho financeiro da pessoa, tentando evitar práticas ruins.
 
-A motivação da criação do aplicativo é o fato de a população brasileira apresenta um grande déficit em relação a educação financeira, fazendo com que a mesma seja conhecida como uma das que mais se endividam no mundo. Isto trás a necessidade de meios acessíveis para ensinar o usuário a controlar seus gastos.
+A motivação da criação do aplicativo é o fato de a população brasileira apresenta um grande déficit em relação a educação financeira, fazendo com que a mesma seja conhecida como uma das que mais se endividam no mundo. 
 
+### Diferencial:
+Facilita a visualização dos gastos, constantemente envia dicas financeiras para o usuário com base nos dados do perfil dele.
 
 ### Funcionalidade:
 - Aconselhamento Financeiro.
-- Gráfico de gastos gerais semanais/mensais/anuais(configurável).
+- Gráfico de visualização dos gastos gerais semanais/mensais/anuais(configurável).
 
 Desenvolvido em [React Native](https://reactnative.dev/), utilizando o expo.
 

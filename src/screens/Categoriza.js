@@ -36,7 +36,7 @@ class Categoriza extends Component {
                         <Picker.Item label="Selecione" value="" />
                         <Picker.Item label="Investimento" value="Investimento" />
                         <Picker.Item label="Despesas" value="Despesas" />
-                        <Picker.Item label="Mercado" value="Mercado" />
+                        <Picker.Item label="Entretenimento" value="Entretenimento" />
                     </Picker>
                 </View>
                 

@@ -13,9 +13,9 @@ import Login from "./src/screens/Login";
 import Categoriza from "./src/screens/Categoriza";
 
 const DrawerNavigation = createDrawerNavigator({
+  Home: Home,
   Login:Login,
   CriarConta:CriarConta,
-  Home: Home,
   Cartoes: Cartoes,
   Extrato: Extrato,
   Untitled: Untitled,

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 import { StackActions, NavigationActions } from "react-navigation";
 import {
   StyleSheet,
@@ -7,17 +8,17 @@ import {
   Text,
   TouchableOpacity,
   StatusBar,
-  Image,
   AsyncStorage,
-  TouchableHighlightBase
   
 } from "react-native";
+import {Picker} from '@react-native-community/picker';
 import MaterialButtonTransparentHamburger from "../components/MaterialButtonTransparentHamburger";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 
 import api from '../services/api'
 import { TOKEN_KEY, setToken, getUser } from "../services/auth";
+import { chartDATA } from "../components/ChartHome";
 
 
 class Home extends Component {
@@ -31,12 +32,15 @@ class Home extends Component {
         balance: 0,
         expense: 0
       },
-      refreshing:false
+      graph: [],
+      chartSelect:'Anual',
+      refreshing:false,
     }
   }
   
   
   async componentDidMount(){
+    
     this.subs = this.props.navigation.addListener("didFocus",async () =>{
       let a;
       await getUser()
@@ -58,6 +62,7 @@ class Home extends Component {
       });
       if (this.state.user !== ''){
         this.loadUser();
+        this.loadGraph('Anual')
       }else{
         this.props.navigation.navigate("Login")
       }
@@ -66,6 +71,8 @@ class Home extends Component {
   componentWillUnmount(){
     this.subs.remove();
   }
+  
+  
   loadUser = async() => {
     let docs = {}
     await api.get('/user/'.concat(this.state.user)) //pega o dado do usuario da api
@@ -90,6 +97,53 @@ class Home extends Component {
     this.setState({docs}) //armazena o dados do usuario
     
   };
+  handleSelectChange = (a) => {
+
+    this.setState({ chartSelect : a});
+    this.loadGraph(a)
+    this.renderGraph()
+    console.log('mudar periodo', this.state.chartSelect)
+  };
+  loadGraph = async(a) =>{
+    console.log('loadG char',this.state.chartSelect)
+    
+    let doc = []
+    try {
+      await api.post('/user/'.concat(this.state.user.concat('/graph')), {
+        select: a,
+      })
+      .then(function(response){
+        doc =response.data
+      })
+    }
+    catch (_err) {
+      console.log(2111,_err)
+    }
+    this.setState({graph:doc})
+  }
+
+  renderGraph = () =>(
+    <View>
+      
+      <View style={styles.chart}>
+        <VictoryChart >
+          <VictoryBar
+          data={this.state.graph}
+          />
+        </VictoryChart>
+      </View> 
+        <Picker
+            selectedValue={this.state.chartSelect}
+            style={styles.picker}
+            onValueChange={(itemValue, itemIndex) =>
+                this.handleSelectChange(itemValue)
+            }>
+            <Picker.Item label="Anual" value="Anual" />
+            <Picker.Item label="Mensal" value="Mensal" />
+        </Picker>
+    </View>
+    
+  )
 
   render (){
     return (
@@ -184,13 +238,9 @@ class Home extends Component {
           </TouchableOpacity>
         </View>
         
-        <Image
-        
-          source={require("../assets/images/javascript-live-dynamic-charts-graphs.png")}
-          resizeMode="stretch"
-          style={styles.image}
-        ></Image>
+       {this.renderGraph()}
       </View>
+      
     );
   }
   
@@ -450,7 +500,22 @@ const styles = StyleSheet.create({
     height: 235,
     marginTop: -316,
     marginLeft: 24
-  }
+  },
+  chart:{
+    marginTop:-300, 
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor:"white",
+    borderRadius: 9,
+  },
+  picker: {
+    marginTop: -300,
+    width: 120,
+    fontSize: 26,
+    alignSelf:'flex-end',
+    fontFamily: "trebuchet-ms-regular",
+    borderRadius:9,
+    }
 });
 
 export default Home;

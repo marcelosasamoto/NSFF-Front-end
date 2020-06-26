@@ -20,6 +20,7 @@ class Cartoes extends Component {
     name: '',
     number: '',
     valid_until: '',
+    cpf:'',
     error: '',
     send: false
   }
@@ -51,7 +52,7 @@ class Cartoes extends Component {
     const cards = response.data.card
     console.log(1212,cards)
     this.setState({ cards }) //armazena o dados do usuario
-    console.log(this.state.name,this.state.number,this.state.valid_until)
+    console.log(this.state.name,this.state.number,this.state.valid_until,this.state.cpf)
   };
  
 
@@ -64,6 +65,9 @@ class Cartoes extends Component {
   handleValidUntil = (valid_until) => {
     this.setState({ valid_until });
   };
+  handleCpf = (cpf) =>{
+    this.setState({cpf})
+  };
   confirm = (send) => {
     this.setState({ send: true });
     this.createCard()
@@ -72,17 +76,18 @@ class Cartoes extends Component {
   createCard = async() => {
     
     console.log(111111,this.state.name,this.state.number,this.state.valid_until)
-    if (this.state.name.length === 0 || this.state.number.length === 0 || this.state.valid_until.length === 0 ) {
+    if (this.state.name.length === 0 || this.state.number.length === 0 || this.state.valid_until.length === 0 || this.state.cpf.length === 0 ) {
       this.setState({ error: 'Preencha todos os dados!' }, () => false);
-      console.log(10000,this.state.name.length ,this.state.number.length,this.state.valid_until.length);
+      console.log(10000,this.state.name.length ,this.state.number.length,this.state.valid_until.length,this.state.cpf.length);
     } else {
       try {
-        console.log(22222,this.state.name, this.state.number, this.state.valid_until)
+        console.log(22222,this.state.name, this.state.number, this.state.valid_until,this.state.cpf)
         const response = await api.post('/user/'.concat(this.state.user,'/addcard'), {
           card: {
             name: this.state.name,
             number: this.state.number,
             valid_until: this.state.valid_until,
+            cpf:this.state.cpf
           }
         })
         console.log(2,response.data)
@@ -145,6 +150,11 @@ class Cartoes extends Component {
                   placeholder='Valido até'
                   value={ this.state.valid_until}
                   onChangeText={this.handleValidUntil} 
+                  keyboardType = 'numeric' />
+                <TextInput style={styles.newbank} 
+                  placeholder='Seu CPF'
+                  value={ this.state.cpf}
+                  onChangeText={this.handleCpf} 
                   keyboardType = 'numeric' />
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "#2196F3" }}

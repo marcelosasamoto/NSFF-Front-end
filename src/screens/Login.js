@@ -34,7 +34,7 @@ class Login extends Component{
         });
         try {
          
-
+          console.log('login',response.data.error)
           if (response.data.error){
             this.setState({ error: 'E-mail ou Senha invalidas' });
           }
@@ -42,7 +42,7 @@ class Login extends Component{
           setUser(response.data._id)
           
         } catch (e) {
-          console.log(e)
+          console.log(12,e)
         }
         this.props.navigation.navigate("Home")
       }

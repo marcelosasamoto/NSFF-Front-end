@@ -18,8 +18,8 @@ const DrawerNavigation = createDrawerNavigator({
   CriarConta:CriarConta,
   Cartoes: Cartoes,
   Extrato: Extrato,
-  Untitled: Untitled,
-  Categoriza: Categoriza
+  Dica: Untitled,
+  'Analise de Gasto': Categoriza
 });
 
 const StackNavigation = createStackNavigator(

@@ -73,6 +73,26 @@ class InfoCont extends Component {
       }
      
   }
+  enablePicker(tipo){
+    if(tipo =='deposito'){
+      return false
+    }
+    return true
+  }
+  enableshowpicker(tipo,categoria){
+    if (tipo == 'deposito'){
+      return 'deposito'
+    }
+    return categoria
+  }
+  enableP(tipo,cat){
+    if (tipo == 'deposito'){
+      return <Picker.Item label="" value="deposito" />
+    }
+    return  <Picker.Item label="Entretenimento" value="entretenimento" />,
+    <Picker.Item label="Despesas" value="despesas" />,
+    <Picker.Item label="Investimento" value="investimento" />
+  }
   renderItem = ({item}) =>(
     
     <View style={styles.container2}>
@@ -83,14 +103,14 @@ class InfoCont extends Component {
         <Text style={styles.data}>{item.data.slice(0,10)}</Text>
         <View style={styles.viewpicker}>
           <Picker
-              selectedValue={item.categoria}
+          
+              enabled={this.enablePicker(item.tipo)}
+              selectedValue={this.enableshowpicker(item.tipo,item.categoria)}
               style={styles.picker}
               onValueChange={(itemValue,itemIndex) =>
                   this.changePicker(itemValue,itemIndex,item._id)
               }>
-              <Picker.Item label="Entretenimento" value="entretenimento" />
-              <Picker.Item label="Despesas" value="despesas" />
-              <Picker.Item label="Investimento" value="investimento" />
+                {this.enableP(item.tipo)}
           </Picker>
         </View>
     </View>

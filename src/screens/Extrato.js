@@ -3,7 +3,7 @@ import { StyleSheet, View, StatusBar, Text, FlatList } from "react-native";
 import api from '../services/api';
 import {getUser} from '../services/auth';
 import {Picker} from '@react-native-community/picker';
-
+import axios from "axios";
 class InfoCont extends Component {
   state = {
     user:'',
@@ -42,21 +42,35 @@ class InfoCont extends Component {
     .catch(s=>{
       console.log('errr',s)
     })
-    
-    
   };
   
+  updateCategory (){
+
+  }
 
   changePicker(value,index,id){
-      //console.log(1111,value,index,id)
+      console.log(1111,value,index,id)
       let a = this.state.transacao
       for (var i=0;i<a.length;i++){
         //console.log(a[i].valor)
         if (a[i]._id == id){
           a[i].categoria = value
+          console.log('user:',this.state.user,value,id,)
+          this.setState({categoria:a.Despesas})
+
+          axios.post('http://192.168.0.117:3200/api/user/categorizar',{
+            cpf:10000000000,      //OLHA AQUI TEM Q MEXER DEPOIS
+            categoria:value,
+            id_fatura:id
+          })
+          .then(s=>{
+            console.log('post mandado')
+          })
+          .catch(err=>{
+            console.log('erro in postapi',err)
+          })
         }
       }
-      this.setState({categoria:a})
      
   }
   renderItem = ({item}) =>(
@@ -74,9 +88,9 @@ class InfoCont extends Component {
               onValueChange={(itemValue,itemIndex) =>
                   this.changePicker(itemValue,itemIndex,item._id)
               }>
-              <Picker.Item label="Não necessario" value="Entretenimento" />
-              <Picker.Item label="Necessario" value="Despesas" />
-              <Picker.Item label="Útil" value="Investimento" />
+              <Picker.Item label="Entretenimento" value="entretenimento" />
+              <Picker.Item label="Despesas" value="despesas" />
+              <Picker.Item label="Investimento" value="investimento" />
           </Picker>
         </View>
     </View>

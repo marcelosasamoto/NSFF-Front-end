@@ -69,6 +69,7 @@ class Cartoes extends Component {
     this.setState({cpf})
   };
   confirm = (send) => {
+    console.log('jfksdjfkls')
     this.setState({ send: true });
     this.createCard()
     this.setModalVisible(!this.state.modalVisible);
@@ -129,9 +130,7 @@ class Cartoes extends Component {
           animationType="slide"
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
+          
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>

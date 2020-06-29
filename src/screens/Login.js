@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StackActions, NavigationActions } from "react-navigation";
 import { StyleSheet, TextInput, View, Text, TouchableOpacity, AsyncStorage } from "react-native";
 import api from '../services/api';
-import { setUser, setToken } from '../services/auth';
+import { getUser, setUser, setToken } from '../services/auth';
 
 class Login extends Component{
   state = {
@@ -28,23 +28,26 @@ class Login extends Component{
       this.setState({ error: 'Preencha suas credenciais' }, () => false);
     } else {
       try {
-        const response = await api.post('/login', {
+        await api.post('/login', {
           email: this.state.email,
           password: this.state.password,
-        });
-        try {
-         
+        })
+        .then(async response=>{
           console.log('login',response.data.error)
           if (response.data.error){
             this.setState({ error: 'E-mail ou Senha invalidas' });
           }
+          console.log(21,response.data)
           await setToken(response.data.token)
-          setUser(response.data._id)
+          await setUser(response.data._id)
+          .then(s =>{
+            console.log(s)
+          })
+          this.props.navigation.navigate("Home")
           
-        } catch (e) {
-          console.log(12,e)
-        }
-        this.props.navigation.navigate("Home")
+        })
+        
+        
       }
       catch (_err) {
         console.log(_err)

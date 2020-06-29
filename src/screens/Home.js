@@ -26,12 +26,8 @@ class Home extends Component {
     super(props);
     this.state = {
       user: '', 
-      docs: {
-        name: '',
-        email: '',
-        balance: 0,
-        expense: 0
-      },
+      saldo:0,
+      analiseG:'',
       graph: [],
       chartSelect:'Anual',
       refreshing:false,
@@ -62,7 +58,8 @@ class Home extends Component {
       });
       if (this.state.user !== ''){
         this.loadUser();
-        this.loadGraph('Anual')
+        //this.loadGraph('Anual')
+        this.loadAnalise();
       }else{
         this.props.navigation.navigate("Login")
       }
@@ -74,27 +71,17 @@ class Home extends Component {
   
   
   loadUser = async() => {
-    let docs = {}
-    await api.get('/user/'.concat(this.state.user)) //pega o dado do usuario da api
+    let saldo = 0
+    await api.get('/user/'.concat(this.state.user,'/saldo')) //pega o dado do usuario da api
     .then( function(response){
-      if (response.data.profile[0] !== undefined ){
-        docs = {
-          name: response.data.name,
-          email: response.data.email,
-          balance: response.data.profile[0].balance,
-          expense: response.data.profile[0].expense
-        }
-      }else {
-        docs = {
-          balance: 0,
-          expense: 0,
-        }
+      if (response.data.saldo !== undefined ){
+        saldo = response.data.saldo
       }
     })
     .catch( function (err){
       console.log('erro',err)
     })
-    this.setState({docs}) //armazena o dados do usuario
+    this.setState({saldo}) //armazena o dados do usuario
     
   };
   handleSelectChange = (a) => {
@@ -121,6 +108,21 @@ class Home extends Component {
     }
     this.setState({graph:doc})
   }
+
+  loadAnalise = async() => {
+    await api.get('/user/'.concat(this.state.user,'/analise'))
+    .then( s => {
+      this.setState({analiseG:s.data.message})
+      
+      
+      //console.log(this.state.analiseG)
+    })
+    .catch(s=>{
+      console.log('errr',s)
+    })
+    
+    
+  };
 
   renderGraph = () =>(
     <View>
@@ -155,91 +157,56 @@ class Home extends Component {
           <Text style={styles.nsff}>NSFF{this.state.refreshing}</Text>
         </View>
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("InfoCont")}
+          onPress={() => this.props.navigation.navigate("Extrato")}
           style={styles.button7}
         >
           <View style={styles.card1}>
             <Text style={styles.saldoDisponivel}>Saldo disponivel</Text>
-            <Text style={styles.saldoDisponivelValor}>{this.state.docs.balance}</Text>
+            <Text style={styles.saldoDisponivelValor}>{this.state.saldo}</Text>
             <Text style={styles.verGastos}>Ver gastos</Text>
           </View>
         </TouchableOpacity>
         <View style={styles.button6Row}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("InfoCont")}
+            onPress={() => this.props.navigation.navigate("Analise")}
             style={styles.button6}
           >
             <View style={styles.group41}>
               <View style={styles.group35}>
                 <View style={styles.rect222}>
-                  <Text style={styles.gastos4}>Gastos</Text>
-                  <Text style={styles.gastos3}>{this.state.docs.expense}</Text>
+                  <Text style={styles.gastos4}>Ver analise</Text>
                 </View>
               </View>
             </View>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate("Dica")}
+            style={styles.button6}
+          >
           <View style={styles.group43}>
-            <View style={styles.group5}>
-              <View style={styles.rect22}>
-                <Text style={styles.saldo2}>Saldo</Text>
-                <Text style={styles.gastos2}>{this.state.docs.balance}</Text>
-              </View>
+          <View style={styles.group5}>
+            <View style={styles.rect22}>
+              <Text style={styles.saldo2}>Ver dicas</Text>
             </View>
           </View>
+        </View>
+
+          </TouchableOpacity>
+            
         </View>
         <StatusBar
           animated={false}
           barStyle="light-content"
           hidden={false}
         ></StatusBar>
-        <View style={styles.button8Row}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("Untitled") }
-            style={styles.button8}
-          >
-            <View style={styles.group6Stack}>
-              <View style={styles.group6}>
-                <View style={styles.rect2334}></View>
-              </View>
-              <FontAwesomeIcon
-                name="question"
-                style={styles.icon3}
-              ></FontAwesomeIcon>
-            </View>
-          </TouchableOpacity>
-          <View style={styles.group47}>
-            <View style={styles.group46}>
-              <View style={styles.group45}>
-                <View style={styles.group33Stack}>
-                  <View style={styles.group33}>
-                    <View style={styles.rect232}></View>
-                  </View>
-                  <FontAwesomeIcon
-                    name="money"
-                    style={styles.icon2}
-                  ></FontAwesomeIcon>
-                </View>
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("Cartoes")}
-            style={styles.button5}
-          >
-            <View style={styles.button3Stack}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Untitled")}
-                style={styles.button3}
-              >
-                <View style={styles.rect2332}></View>
-              </TouchableOpacity>
-              <EntypoIcon name="credit-card" style={styles.icon4}></EntypoIcon>
-            </View>
-          </TouchableOpacity>
-        </View>
         
-       {this.renderGraph()}
+        
+      {/*this.renderGraph()*/}
+      <View style={styles.tip}>
+        
+    <Text style={styles.txt}>{this.state.analiseG}</Text>
+
       </View>
+    </View>
       
     );
   }
@@ -255,6 +222,23 @@ const styles = StyleSheet.create({
     width: 60,
     height: 47
   },
+  tip:{
+    backgroundColor:"white",
+    marginTop:20,
+    height:300,
+    width:365,
+    backgroundColor: "rgba(12,13,66,1)",
+    borderRadius: 9,
+    alignSelf:'center'
+  },
+  txt:{
+    color:"white",
+    marginTop:15,
+    fontSize:19, 
+    marginLeft:10,
+    fontFamily: "trebuchet-ms-regular",
+    textAlign:'auto',
+},
   nsff: {
     width: 148,
     height: 58,
@@ -268,7 +252,7 @@ const styles = StyleSheet.create({
   materialButtonTransparentHamburgerRow: {
     height: 81,
     flexDirection: "row",
-    marginTop: 22,
+    marginTop: 0,
     marginRight: 131,
     
   },

@@ -7,10 +7,10 @@ import * as Font from "expo-font";
 import Cartoes from "./src/screens/Cartoes";
 import Home from "./src/screens/Home";
 import Extrato from "./src/screens/Extrato";
-import Untitled from "./src/screens/Untitled";
+import Dicas from "./src/screens/Dicas";
 import CriarConta from "./src/screens/CriarConta";
 import Login from "./src/screens/Login";
-import Categoriza from "./src/screens/Categoriza";
+import Analise from "./src/screens/Analise";
 
 const DrawerNavigation = createDrawerNavigator({
   Home: Home,
@@ -18,8 +18,8 @@ const DrawerNavigation = createDrawerNavigator({
   CriarConta:CriarConta,
   Cartoes: Cartoes,
   Extrato: Extrato,
-  Dica: Untitled,
-  'Analise de Gasto': Categoriza
+  Dica: Dicas,
+  Analise: Analise
 });
 
 const StackNavigation = createStackNavigator(
@@ -32,8 +32,8 @@ const StackNavigation = createStackNavigator(
     Home: Home,
     Cartoes: Cartoes,
     Extrato: Extrato,
-    Untitled: Untitled,
-    Categoriza: Categoriza
+    Dicas: Dicas,
+    Analise: Analise
   },
   {
     headerMode: "none"

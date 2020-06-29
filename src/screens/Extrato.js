@@ -89,9 +89,11 @@ class InfoCont extends Component {
     if (tipo == 'deposito'){
       return <Picker.Item label="" value="deposito" />
     }
-    return  <Picker.Item label="Entretenimento" value="entretenimento" />,
-    <Picker.Item label="Despesas" value="despesas" />,
-    <Picker.Item label="Investimento" value="investimento" />
+    var a=[]
+    a.push(<Picker.Item key='entretenimento' label="Entretenimento" value="entretenimento" />,
+    <Picker.Item key='despesas' label="Despesas" value="despesas" />,
+    <Picker.Item key='investimento' label="Investimento" value="investimento" />)
+    return  (a)
   }
   renderItem = ({item}) =>(
     
